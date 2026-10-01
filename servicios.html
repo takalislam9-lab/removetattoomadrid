@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Servicios — Remove Tattoo</title>
+<meta name="description" content="Todos los tratamientos de Remove Tattoo: eliminación de tatuajes, aclarado para retoque, carbón activo facial y más.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#faf6f3;
+    --ink:#3d2b28;
+    --dark:#2a1f1d;
+    --rose:#b8867f;
+    --muted:#6b4f4a;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{font-family:'Jost',sans-serif;background:var(--cream);color:var(--ink);overflow-x:hidden;font-weight:300;}
+  a{text-decoration:none;color:inherit;}
+  h1,h2,h3{font-family:'Cormorant Garamond',serif;font-weight:500;}
+  img{max-width:100%;display:block;}
+
+  header{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    display:flex;justify-content:space-between;align-items:center;
+    padding:26px 6%;background:rgba(250,246,243,.88);backdrop-filter:blur(10px);
+  }
+  .logo{display:flex;align-items:center;gap:10px;font-family:'Cormorant Garamond',serif;font-size:1.5rem;color:var(--dark);}
+  .logo svg{color:var(--rose);}
+  .logo .script{font-style:italic;font-weight:500;}
+  nav ul{list-style:none;display:flex;gap:36px;}
+  nav a{font-size:.8rem;letter-spacing:1.5px;text-transform:uppercase;font-weight:400;}
+  .nav-toggle{display:none;font-size:1.6rem;background:none;border:none;color:var(--dark);}
+
+  .page-hero{padding:170px 7% 60px;text-align:center;max-width:720px;margin:0 auto;}
+  .page-hero .eyebrow{color:var(--rose);text-transform:uppercase;letter-spacing:3px;font-size:.78rem;font-weight:500;}
+  .page-hero h1{font-size:clamp(2.2rem,4.5vw,3.2rem);margin-top:14px;font-style:italic;color:var(--dark);}
+  .page-hero p{margin-top:18px;color:var(--muted);font-weight:300;line-height:1.8;}
+
+  .cat-list{max-width:1200px;margin:0 auto;padding:20px 7% 110px;display:flex;flex-direction:column;gap:26px;}
+  .cat-card{
+    position:relative;border-radius:14px;overflow:hidden;min-height:340px;
+    display:flex;align-items:flex-end;padding:40px;cursor:pointer;
+  }
+  .cat-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;}
+  .cat-card::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg, rgba(42,31,29,.88) 0%, rgba(42,31,29,.55) 45%, rgba(42,31,29,.15) 100%);z-index:1;}
+  .cat-card-content{position:relative;z-index:2;color:#fff;max-width:480px;}
+  .cat-card h2{font-size:2.4rem;font-style:italic;margin-bottom:14px;}
+  .cat-card p{font-size:.92rem;color:#e8ddd8;font-weight:300;margin-bottom:18px;line-height:1.6;}
+  .cat-card .count{color:var(--rose);font-size:.82rem;letter-spacing:1px;margin-bottom:18px;display:block;}
+  .cat-card button{
+    background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.4);color:#fff;
+    padding:13px 28px;font-size:.76rem;letter-spacing:1.5px;text-transform:uppercase;border-radius:30px;
+    cursor:pointer;transition:background .2s;
+  }
+  .cat-card button:hover{background:rgba(255,255,255,.2);}
+
+  .modal-overlay{
+    display:none;position:fixed;inset:0;background:rgba(42,31,29,.65);z-index:1000;
+    align-items:center;justify-content:center;padding:20px;
+  }
+  .modal-overlay.open{display:flex;}
+  .modal-box{background:var(--cream);border-radius:16px;max-width:560px;width:100%;max-height:80vh;overflow-y:auto;padding:40px;}
+  .modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;}
+  .modal-head h3{font-size:1.8rem;font-style:italic;color:var(--dark);}
+  .modal-close{background:none;border:none;font-size:1.4rem;color:var(--muted);cursor:pointer;}
+  .modal-row{display:flex;justify-content:space-between;align-items:center;padding:18px 0;border-bottom:1px solid rgba(61,43,40,.1);}
+  .modal-row .name{font-size:.88rem;letter-spacing:.5px;text-transform:uppercase;font-weight:500;color:var(--dark);}
+  .modal-row .price{font-weight:600;color:var(--dark);font-size:1rem;}
+  .modal-row .dur{font-size:.78rem;color:var(--muted);margin-left:8px;}
+  .modal-cta{display:block;text-align:center;margin-top:28px;background:var(--rose);color:var(--cream);padding:15px;border-radius:30px;font-size:.8rem;letter-spacing:1.5px;text-transform:uppercase;}
+
+  .wa-fab{
+    position:fixed;bottom:26px;right:26px;z-index:200;width:60px;height:60px;border-radius:50%;
+    background:#25D366;display:flex;align-items:center;justify-content:center;
+    box-shadow:0 10px 28px rgba(37,211,102,.45);
+  }
+
+  footer{background:var(--dark);color:#d9c9c5;padding:50px 7%;text-align:center;font-size:.82rem;font-weight:300;}
+
+  @media(max-width:900px){
+    .cat-card{padding:28px;min-height:280px;}
+    .cat-card h2{font-size:1.8rem;}
+    nav{position:fixed;top:0;right:0;height:100vh;width:78%;max-width:300px;background:var(--cream);
+      flex-direction:column;padding:110px 40px;transform:translateX(100%);transition:transform .4s;box-shadow:-10px 0 40px rgba(0,0,0,.1);}
+    nav.open{transform:translateX(0);}
+    nav ul{flex-direction:column;gap:28px;}
+    .nav-toggle{display:block;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="logo">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M12 2l2.5 7.5L22 12l-7.5 2.5L12 22l-2.5-7.5L2 12l7.5-2.5z"/></svg>
+    Remove <span class="script">tattoo</span>
+  </a>
+  <nav id="nav">
+    <ul>
+      <li><a href="index.html#inicio">Inicio</a></li>
+      <li><a href="servicios.html">Servicios</a></li>
+      <li><a href="index.html#galeria">Resultados</a></li>
+      <li><a href="index.html#opiniones">Opiniones</a></li>
+      <li><a href="index.html#contacto">Contacto</a></li>
+    </ul>
+  </nav>
+  <button class="nav-toggle" id="navToggle">☰</button>
+</header>
+
+<section class="page-hero">
+  <span class="eyebrow">Lo que ofrecemos</span>
+  <h1>Nuestros servicios</h1>
+  <p>Cuidado de tu piel en cada detalle. Descubre todos nuestros tratamientos especializados.</p>
+</section>
+
+<div class="cat-list">
+
+  <div class="cat-card" onclick="openModal('tatuajes')">
+    <img src="remove1.jpg" alt="Eliminación de tatuajes con láser">
+    <div class="cat-card-content">
+      <h2>Eliminación de Tatuajes</h2>
+      <p>Tratamiento láser progresivo adaptado al tamaño, color y antigüedad de tu tatuaje.</p>
+      <span class="count">✦ 4 servicios disponibles</span>
+      <button>Ver todos los servicios →</button>
+    </div>
+  </div>
+
+  <div class="cat-card" onclick="openModal('retoque')">
+    <img src="svc_cover.jpg" alt="Aclarado de tatuaje para retoque">
+    <div class="cat-card-content">
+      <h2>Aclarado para Retoque</h2>
+      <p>Aclara un tatuaje antiguo para cubrirlo con uno nuevo, con mejores resultados de cover-up.</p>
+      <span class="count">✦ 2 servicios disponibles</span>
+      <button>Ver todos los servicios →</button>
+    </div>
+  </div>
+
+  <div class="cat-card" onclick="openModal('carbon')">
+    <img src="svc_facial.jpg" alt="Tratamiento facial con carbón activo">
+    <div class="cat-card-content">
+      <h2>Carbón Activo Facial</h2>
+      <p>Tratamiento facial con láser para unificar el tono de la piel y mejorar manchas.</p>
+      <span class="count">✦ 2 servicios disponibles</span>
+      <button>Ver todos los servicios →</button>
+    </div>
+  </div>
+
+  <div class="cat-card" onclick="openModal('micro')">
+    <img src="svc_micro.jpg" alt="Aclarado de micropigmentación y cejas">
+    <div class="cat-card-content">
+      <h2>Aclarado de Micropigmentación</h2>
+      <p>Eliminación o aclarado de cejas y labios con pigmento para corregir o rehacer el diseño.</p>
+      <span class="count">✦ 2 servicios disponibles</span>
+      <button>Ver todos los servicios →</button>
+    </div>
+  </div>
+
+  <div class="cat-card" onclick="openModal('valoracion')">
+    <img src="remove2.jpg" alt="Valoración y seguimiento en Remove Tattoo">
+    <div class="cat-card-content">
+      <h2>Valoración y Seguimiento</h2>
+      <p>Estudiamos tu caso antes de empezar y te acompañamos entre sesiones.</p>
+      <span class="count">✦ 2 servicios disponibles</span>
+      <button>Ver todos los servicios →</button>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  © 2026 Remove Tattoo — Madrid · Diseñado con ✦ para tu nuevo comienzo
+</footer>
+
+<!-- Modals -->
+<div class="modal-overlay" id="modal-tatuajes">
+  <div class="modal-box">
+    <div class="modal-head"><h3>Eliminación de Tatuajes</h3><button class="modal-close" onclick="closeModal()">✕</button></div>
+    <div class="modal-row"><span class="name">Tatuaje pequeño</span><span><span class="price">60 €</span><span class="dur">30 min</span></span></div>
+    <div class="modal-row"><span class="name">Tatuaje mediano</span><span><span class="price">90 €</span><span class="dur">30 min</span></span></div>
+    <div class="modal-row"><span class="name">Tatuaje grande</span><span><span class="price">150 €</span><span class="dur">45 min</span></span></div>
+    <div class="modal-row"><span class="name">Tatuaje extra grande</span><span><span class="price">200 €</span><span class="dur">1 h</span></span></div>
+    <a href="https://wa.me/34674011801?text=Hola%2C%20quiero%20reservar%20una%20eliminaci%C3%B3n%20de%20tatuaje" class="modal-cta" target="_blank" rel="noopener">Reservar por WhatsApp</a>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-retoque">
+  <div class="modal-box">
+    <div class="modal-head"><h3>Aclarado para Retoque</h3><button class="modal-close" onclick="closeModal()">✕</button></div>
+    <div class="modal-row"><span class="name">Aclarado parcial</span><span><span class="price">70 €</span><span class="dur">30 min</span></span></div>
+    <div class="modal-row"><span class="name">Aclarado pieza grande</span><span><span class="price">140 €</span><span class="dur">45 min</span></span></div>
+    <a href="https://wa.me/34674011801?text=Hola%2C%20quiero%20reservar%20un%20aclarado%20para%20retoque" class="modal-cta" target="_blank" rel="noopener">Reservar por WhatsApp</a>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-carbon">
+  <div class="modal-box">
+    <div class="modal-head"><h3>Carbón Activo Facial</h3><button class="modal-close" onclick="closeModal()">✕</button></div>
+    <div class="modal-row"><span class="name">Sesión única</span><span><span class="price">35 €</span><span class="dur">30 min</span></span></div>
+    <div class="modal-row"><span class="name">Bono 3 sesiones</span><span><span class="price">90 €</span><span class="dur">30 min c/u</span></span></div>
+    <a href="https://wa.me/34674011801?text=Hola%2C%20quiero%20reservar%20carb%C3%B3n%20activo%20facial" class="modal-cta" target="_blank" rel="noopener">Reservar por WhatsApp</a>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-micro">
+  <div class="modal-box">
+    <div class="modal-head"><h3>Aclarado de Micropigmentación</h3><button class="modal-close" onclick="closeModal()">✕</button></div>
+    <div class="modal-row"><span class="name">Cejas</span><span><span class="price">80 €</span><span class="dur">30 min</span></span></div>
+    <div class="modal-row"><span class="name">Labios</span><span><span class="price">90 €</span><span class="dur">30 min</span></span></div>
+    <a href="https://wa.me/34674011801?text=Hola%2C%20quiero%20reservar%20un%20aclarado%20de%20micropigmentaci%C3%B3n" class="modal-cta" target="_blank" rel="noopener">Reservar por WhatsApp</a>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-valoracion">
+  <div class="modal-box">
+    <div class="modal-head"><h3>Valoración y Seguimiento</h3><button class="modal-close" onclick="closeModal()">✕</button></div>
+    <div class="modal-row"><span class="name">Valoración inicial</span><span><span class="price">Gratis</span><span class="dur">20 min</span></span></div>
+    <div class="modal-row"><span class="name">Revisión de seguimiento</span><span><span class="price">20 €</span><span class="dur">15 min</span></span></div>
+    <a href="https://wa.me/34674011801?text=Hola%2C%20quiero%20pedir%20una%20valoraci%C3%B3n%20gratuita" class="modal-cta" target="_blank" rel="noopener">Reservar por WhatsApp</a>
+  </div>
+</div>
+
+<a class="wa-fab" href="https://wa.me/34674011801?text=Hola%2C%20quiero%20reservar%20una%20valoraci%C3%B3n%20gratuita%20en%20Remove%20Tattoo" target="_blank" rel="noopener" aria-label="Escribir por WhatsApp">
+  <svg width="28" height="28" viewBox="0 0 32 32" fill="white"><path d="M16.001 3C9.373 3 4 8.373 4 15.001c0 2.386.702 4.605 1.912 6.472L4 29l7.727-1.878A11.94 11.94 0 0 0 16.001 27C22.629 27 28 21.629 28 15.001 28 8.373 22.629 3 16.001 3zm0 21.818a9.77 9.77 0 0 1-4.98-1.363l-.357-.212-4.583 1.114 1.15-4.47-.232-.367a9.8 9.8 0 0 1-1.5-5.219c0-5.421 4.412-9.833 9.833-9.833s9.833 4.412 9.833 9.833-4.412 9.833-9.833 9.833zm5.38-7.36c-.294-.148-1.741-.859-2.011-.957-.27-.098-.467-.148-.663.148-.196.294-.76.957-.932 1.153-.172.196-.343.221-.637.074-.294-.148-1.242-.458-2.366-1.462-.874-.78-1.464-1.744-1.636-2.038-.172-.294-.018-.453.13-.6.133-.133.294-.343.441-.515.147-.172.196-.294.294-.49.098-.196.049-.368-.025-.515-.074-.148-.663-1.6-.909-2.19-.24-.575-.484-.497-.663-.506l-.564-.01c-.196 0-.515.074-.784.368-.27.294-1.03 1.007-1.03 2.456s1.055 2.85 1.202 3.046c.147.196 2.077 3.17 5.033 4.445.703.303 1.252.484 1.68.619.706.225 1.348.193 1.855.117.566-.085 1.741-.712 1.987-1.4.245-.688.245-1.278.172-1.4-.074-.123-.27-.196-.564-.344z"/></svg>
+</a>
+
+<script>
+  const toggle = document.getElementById('navToggle');
+  const nav = document.getElementById('nav');
+  toggle.addEventListener('click', () => nav.classList.toggle('open'));
+
+  function openModal(id){
+    document.getElementById('modal-'+id).classList.add('open');
+  }
+  function closeModal(){
+    document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('open'));
+  }
+  document.querySelectorAll('.modal-overlay').forEach(overlay => {
+    overlay.addEventListener('click', (e) => { if(e.target === overlay) closeModal(); });
+  });
+</script>
+
+</body>
+</html>
